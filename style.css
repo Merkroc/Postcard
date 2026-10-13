@@ -8,11 +8,13 @@ body {
     font-family: 'Quicksand', 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 50%, #ff9a9e 100%);
     min-height: 100vh;
+    min-height: 100dvh; /* Для мобильных браузеров */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative;
+    -webkit-overflow-scrolling: touch;
 }
 
 .floating-hearts {
@@ -35,20 +37,10 @@ body {
 }
 
 @keyframes floatUp {
-    0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.6;
-    }
-    90% {
-        opacity: 0.6;
-    }
-    100% {
-        transform: translateY(-110vh) translateX(100px) rotate(360deg);
-        opacity: 0;
-    }
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-110vh) translateX(100px) rotate(360deg); opacity: 0; }
 }
 
 .container {
@@ -62,6 +54,7 @@ body {
     position: relative;
     z-index: 10;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
@@ -118,13 +111,14 @@ p {
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-weight: 600;
     font-family: 'Quicksand', sans-serif;
     box-shadow: 0 4px 15px rgba(233, 30, 99, 0.2);
     display: inline-block;
-    visibility: visible;
-    opacity: 1;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
 .btn-yes {
@@ -154,9 +148,30 @@ p {
     font-size: 0.95em;
 }
 
+/* Убегающая кнопка */
 .btn.running {
-    position: fixed;
-    z-index: 9999;
+    position: fixed !important;
+    z-index: 9999 !important;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    will-change: transform;
+}
+
+.btn.running::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50px;
+    background: rgba(233, 30, 99, 0.3);
+    z-index: -1;
+    animation: pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0; }
 }
 
 .modal {
@@ -168,6 +183,7 @@ p {
     height: 100%;
     background: rgba(233, 30, 99, 0.3);
     backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -225,6 +241,7 @@ p {
     position: relative;
     z-index: 10;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 @keyframes fadeIn {
@@ -256,4 +273,5 @@ p {
     p { font-size: 1em; }
     .heart-icon { font-size: 2.5em; }
     .success-message h1 { font-size: 2.8em; }
+    .btn { padding: 13px 28px; font-size: 0.95em; }
 }
