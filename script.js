@@ -10,11 +10,6 @@ const floatingHeartsContainer = document.getElementById('floatingHearts');
 let noBtnMoveCount = 0;
 const MAX_NO_MOVES = 5;
 
-const screenWidth = window.screen.width;
-const screenHeight = window.screen.height;
-
-console.log('Разрешение экрана:', screenWidth, 'x', screenHeight);
-
 let noBtnWidth = 150;
 let noBtnHeight = 50;
 let confirmNoWidth = 150;
@@ -35,19 +30,27 @@ function createFloatingHearts() {
 }
 
 function moveButton(button, btnWidth, btnHeight) {
-    const padding = 40;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
     
-    const maxX = screenWidth - btnWidth - padding;
-    const maxY = screenHeight - btnHeight - padding;
+    const padding = 60;
     
-    const newX = Math.max(padding, Math.random() * maxX);
-    const newY = Math.max(padding, Math.random() * maxY);
+    const minX = padding;
+    const maxX = viewportWidth - btnWidth - padding;
+    const minY = padding;
+    const maxY = viewportHeight - btnHeight - padding;
+    
+    const safeMaxX = Math.max(minX + 10, maxX);
+    const safeMaxY = Math.max(minY + 10, maxY);
+    
+    const newX = Math.random() * (safeMaxX - minX) + minX;
+    const newY = Math.random() * (safeMaxY - minY) + minY;
     
     button.classList.add('running');
     button.style.left = newX + 'px';
     button.style.top = newY + 'px';
     
-    console.log(`Кнопка перемещена: x=${newX.toFixed(0)}, y=${newY.toFixed(0)}, max: ${maxX.toFixed(0)}x${maxY.toFixed(0)}`);
+    console.log(`Кнопка: x=${newX.toFixed(0)}, y=${newY.toFixed(0)}, viewport: ${viewportWidth}x${viewportHeight}, btn: ${btnWidth}x${btnHeight}`);
 }
 
 function resetButton(button) {
@@ -73,6 +76,7 @@ window.addEventListener('load', function() {
     
     console.log('Размеры noBtn:', noBtnWidth, 'x', noBtnHeight);
     console.log('Размеры confirmNo:', confirmNoWidth, 'x', confirmNoHeight);
+    console.log('Viewport:', window.innerWidth, 'x', window.innerHeight);
 });
 
 noBtn.addEventListener('mouseenter', function() {
@@ -127,7 +131,7 @@ function showSuccess() {
 let heartsInterval;
 
 function startInfiniteHearts() {
-    const hearts = ['💖', '💕', '💗', '💓', '❤️', '💘', '💝'];
+    const hearts = ['💖', '💕', '💗', '💓', '❤️', '💘', '💝', '🫰', '💋', '❤️‍🔥', '🤍', '💜'];
     
     function createHeart() {
         const heart = document.createElement('div');
